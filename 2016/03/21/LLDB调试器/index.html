@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" >
+  <title>LLDB调试器总结 | 新浪理财师移动端团队博客</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="&amp;#x8C03;&amp;#x8BD5;&amp;#x6280;&amp;#x5DE7;&amp;#x603B;&amp;#x7ED3;&amp;#xFF0C;&amp;#x63D0;&amp;#x9AD8;&amp;#x8C03;&amp;#x8BD5;&amp;#x6548;&amp;#x7387;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="LLDB调试器总结">
+<meta property="og:url" content="http://licaishi.github.io/2016/03/21/LLDB调试器/index.html">
+<meta property="og:site_name" content="新浪理财师移动端团队博客">
+<meta property="og:description" content="&amp;#x8C03;&amp;#x8BD5;&amp;#x6280;&amp;#x5DE7;&amp;#x603B;&amp;#x7ED3;&amp;#xFF0C;&amp;#x63D0;&amp;#x9AD8;&amp;#x8C03;&amp;#x8BD5;&amp;#x6548;&amp;#x7387;">
+<meta property="og:image" content="http://img.blog.csdn.net/20160219130747345">
+<meta property="og:image" content="http://img.blog.csdn.net/20160219131112252">
+<meta property="og:image" content="http://img.blog.csdn.net/20160219131154628">
+<meta property="og:image" content="http://img.blog.csdn.net/20160219131222253">
+<meta property="og:image" content="http://img.blog.csdn.net/20160219131257653">
+<meta property="og:image" content="http://img.blog.csdn.net/20160219131340341">
+<meta property="og:image" content="http://img.blog.csdn.net/20160219131443972">
+<meta property="og:updated_time" content="2016-03-31T06:45:25.790Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="LLDB调试器总结">
+<meta name="twitter:description" content="&amp;#x8C03;&amp;#x8BD5;&amp;#x6280;&amp;#x5DE7;&amp;#x603B;&amp;#x7ED3;&amp;#xFF0C;&amp;#x63D0;&amp;#x9AD8;&amp;#x8C03;&amp;#x8BD5;&amp;#x6548;&amp;#x7387;">
+  
+    <link rel="alternative" href="/atom.xml" title="新浪理财师移动端团队博客" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+</head>
+
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+	<header id="header" class="inner">
+		<a href="/" class="profilepic">
+			
+			<img lazy-src="null" class="js-avatar">
+			
+		</a>
+
+		<hgroup>
+		  <h1 class="header-author"><a href="/">新浪理财师移动端团队</a></h1>
+		</hgroup>
+
+		
+
+		
+			<div class="switch-btn">
+				<div class="icon">
+					<div class="icon-ctn">
+						<div class="icon-wrap icon-house" data-idx="0">
+							<div class="birdhouse"></div>
+							<div class="birdhouse_holes"></div>
+						</div>
+						<div class="icon-wrap icon-ribbon hide" data-idx="1">
+							<div class="ribbon"></div>
+						</div>
+						
+						<div class="icon-wrap icon-link hide" data-idx="2">
+							<div class="loopback_l"></div>
+							<div class="loopback_r"></div>
+						</div>
+						
+						
+						<div class="icon-wrap icon-me hide" data-idx="3">
+							<div class="user"></div>
+							<div class="shoulder"></div>
+						</div>
+						
+					</div>
+					
+				</div>
+				<div class="tips-box hide">
+					<div class="tips-arrow"></div>
+					<ul class="tips-inner">
+						<li>菜单</li>
+						<li>标签</li>
+						
+						<li>友情链接</li>
+						
+						
+						<li>关于我</li>
+						
+					</ul>
+				</div>
+			</div>
+		
+
+		<div class="switch-area">
+			<div class="switch-wrap">
+				<section class="switch-part switch-part1">
+					<nav class="header-menu">
+						<ul>
+						
+							<li><a href="/">主页</a></li>
+				        
+							<li><a href="/archives">所有文章</a></li>
+				        
+						</ul>
+					</nav>
+					<nav class="header-nav">
+						<div class="social">
+							
+								<a class="github" target="_blank" href="/#" title="github">github</a>
+					        
+								<a class="weibo" target="_blank" href="/#" title="weibo">weibo</a>
+					        
+								<a class="rss" target="_blank" href="/#" title="rss">rss</a>
+					        
+								<a class="zhihu" target="_blank" href="/#" title="zhihu">zhihu</a>
+					        
+						</div>
+					</nav>
+				</section>
+				
+				
+				<section class="switch-part switch-part2">
+					<div class="widget tagcloud" id="js-tagcloud">
+						<a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/xcode/" style="font-size: 10px;">xcode</a>
+					</div>
+				</section>
+				
+				
+				
+				<section class="switch-part switch-part3">
+					<div id="js-friends">
+					
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://localhost:4000/">奥巴马的博客</a>
+			        
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://localhost:4000/">卡卡的美丽传说</a>
+			        
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://localhost:4000/">本泽马的博客</a>
+			        
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://localhost:4000/">吉格斯的博客</a>
+			        
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://localhost:4000/">习大大大不同</a>
+			        
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://localhost:4000/">托蒂的博客</a>
+			        
+			        </div>
+				</section>
+				
+
+				
+				
+				<section class="switch-part switch-part4">
+				
+					<div id="js-aboutme">我是谁，我从哪里来，我到哪里去？我就是我，是颜色不一样的吃货…</div>
+				</section>
+				
+			</div>
+		</div>
+	</header>				
+</div>
+
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+  	<div class="overlay">
+  		<div class="slider-trigger"></div>
+  		<h1 class="header-author js-mobile-header hide">新浪理财师移动端团队</h1>
+  	</div>
+	<div class="intrude-less">
+		<header id="header" class="inner">
+			<div class="profilepic">
+			
+				<img lazy-src="null" class="js-avatar">
+			
+			</div>
+			<hgroup>
+			  <h1 class="header-author">新浪理财师移动端团队</h1>
+			</hgroup>
+			
+			<nav class="header-menu">
+				<ul>
+				
+					<li><a href="/">主页</a></li>
+		        
+					<li><a href="/archives">所有文章</a></li>
+		        
+		        <div class="clearfix"></div>
+				</ul>
+			</nav>
+			<nav class="header-nav">
+				<div class="social">
+					
+						<a class="github" target="_blank" href="/#" title="github">github</a>
+			        
+						<a class="weibo" target="_blank" href="/#" title="weibo">weibo</a>
+			        
+						<a class="rss" target="_blank" href="/#" title="rss">rss</a>
+			        
+						<a class="zhihu" target="_blank" href="/#" title="zhihu">zhihu</a>
+			        
+				</div>
+			</nav>
+		</header>				
+	</div>
+</nav>
+
+      <div class="body-wrap"><article id="post-LLDB调试器" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/03/21/LLDB调试器/" class="article-date">
+  	<time datetime="2016-03-21T12:04:17.000Z" itemprop="datePublished">2016-03-21</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      LLDB调试器总结
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/xcode/">xcode</a></li></ul>
+	</div>
+
+        
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>&#x8C03;&#x8BD5;&#x6280;&#x5DE7;&#x603B;&#x7ED3;&#xFF0C;&#x63D0;&#x9AD8;&#x8C03;&#x8BD5;&#x6548;&#x7387;</p>
+<a id="more"></a>
+<blockquote>
+<p>LLDB &#x662F;&#x4E00;&#x4E2A;&#x6709;&#x7740; REPL &#x7684;&#x7279;&#x6027;&#x548C; C++ ,Python &#x63D2;&#x4EF6;&#x7684;&#x5F00;&#x6E90;&#x8C03;&#x8BD5;&#x5668;&#x3002;LLDB &#x7ED1;&#x5B9A;&#x5728; Xcode &#x5185;&#x90E8;&#xFF0C;&#x5B58;&#x5728;&#x4E8E;&#x4E3B;&#x7A97;&#x53E3;&#x5E95;&#x90E8;&#x7684;&#x63A7;&#x5236;&#x53F0;&#x4E2D;&#x3002;&#x8C03;&#x8BD5;&#x5668;&#x5141;&#x8BB8;&#x4F60;&#x5728;&#x7A0B;&#x5E8F;&#x8FD0;&#x884C;&#x7684;&#x7279;&#x5B9A;&#x65F6;&#x6682;&#x505C;&#x5B83;&#xFF0C;&#x4F60;&#x53EF;&#x4EE5;&#x67E5;&#x770B;&#x53D8;&#x91CF;&#x7684;&#x503C;&#xFF0C;&#x6267;&#x884C;&#x81EA;&#x5B9A;&#x7684;&#x6307;&#x4EE4;&#xFF0C;&#x5E76;&#x4E14;&#x6309;&#x7167;&#x4F60;&#x6240;&#x8BA4;&#x4E3A;&#x5408;&#x9002;&#x7684;&#x6B65;&#x9AA4;&#x6765;&#x64CD;&#x4F5C;&#x7A0B;&#x5E8F;&#x7684;&#x8FDB;&#x5C55;&#x3002;(<a href="http://eli.thegreenplace.net/2011/01/23/how-debuggers-work-part-1.html" target="_blank" rel="external">&#x8FD9;&#x91CC;</a>&#x6709;&#x4E00;&#x4E2A;&#x5173;&#x4E8E;&#x8C03;&#x8BD5;&#x5668;&#x5982;&#x4F55;&#x5DE5;&#x4F5C;&#x7684;&#x603B;&#x4F53;&#x7684;&#x89E3;&#x91CA;&#x3002;)</p>
+</blockquote>
+<p>##&#x57FA;&#x7840;</p>
+<ul>
+<li><code>help &lt;&#x53D8;&#x91CF;&gt;</code> //&#x4E86;&#x89E3;&#x547D;&#x4EE4;&#x7684;&#x66F4;&#x591A;&#x7EC6;&#x8282;</li>
+<li><p><code>p &lt;&#x53D8;&#x91CF;&gt;</code> //p&#x662F;print&#x7684;&#x7B80;&#x5199; &#x7528;&#x6765;&#x6253;&#x5370;&#x503C;&#x7C7B;&#x578B;<br><img src="http://img.blog.csdn.net/20160219130747345" alt="p&#x547D;&#x4EE4;"></p>
+<p> &#x53E6;&#x5916;&#xFF0C;&#x7ED3;&#x679C;&#x4E2D;&#x6709;&#x4E2A; <code>$0</code>&#x3002;&#x5B9E;&#x9645;&#x4E0A;&#x4F60;&#x53EF;&#x4EE5;&#x4F7F;&#x7528;&#x5B83;&#x6765;&#x6307;&#x5411;&#x8FD9;&#x4E2A;&#x7ED3;&#x679C;&#x3002;&#x8BD5;&#x8BD5; <code>print $0 + 7</code>&#xFF0C;&#x4F60;&#x4F1A;&#x770B;&#x5230; <code>106</code>&#x3002;&#x4EFB;&#x4F55;&#x4EE5;&#x7F8E;&#x5143;&#x7B26;&#x5F00;&#x5934;&#x7684;&#x4E1C;&#x897F;&#x90FD;&#x662F;&#x5B58;&#x5728;&#x4E8E; LLDB &#x7684;&#x547D;&#x540D;&#x7A7A;&#x95F4;&#x7684;&#xFF0C;&#x5B83;&#x4EEC;&#x662F;&#x4E3A;&#x4E86;&#x5E2E;&#x52A9;&#x4F60;&#x8FDB;&#x884C;&#x8C03;&#x8BD5;&#x800C;&#x5B58;&#x5728;&#x7684;&#x3002;</p>
+</li>
+<li><p><code>po &lt;&#x53D8;&#x91CF;&gt;</code> //po&#x662F;print object&#x7684;&#x7B80;&#x5199; &#x7528;&#x6765;&#x6253;&#x5370;&#x5BF9;&#x8C61;&#x7C7B;&#x578B;</p>
+<p>&#x5C1D;&#x8BD5;&#x8F93;&#x5165;</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">p ocValue</span><br></pre></td></tr></table></figure>
+<p>&#x8F93;&#x51FA;&#x7ED3;&#x679C;&#x6BD4;&#x8F83;&#x7E41;&#x7410;</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(__NSCFConstantString *) $1 = 0x0000000100001038 @&quot;Hellow World&quot;</span><br></pre></td></tr></table></figure>
+<p>&#x5982;&#x679C;&#x662F;&#x590D;&#x6742;&#x7684;&#x5BF9;&#x8C61;&#x5219;&#x66F4;&#x7CDF;</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(lldb) p @[ @&quot;foo&quot;, @&quot;bar&quot; ]
+(__NSArrayI *) $4 = 0x0000000100600020 @&quot;2 objects&quot;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p> &#x901A;&#x5E38;&#xFF0C;&#x6211;&#x4EEC;&#x60F3;&#x770B;&#x7684;&#x662F;&#x5BF9;&#x8C61;&#x7684;description&#x65B9;&#x6CD5;&#x7684;&#x7ED3;&#x679C;&#xFF0C;&#x53EF;&#x4EE5;</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(lldb) po ocValue
+Hellow World</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p><code>e &lt;&#x8D4B;&#x503C;&#x8868;&#x8FBE;&#x5F0F;&gt;</code> //e&#x662F;expression&#x7684;&#x7B80;&#x5199;</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(lldb) e ocValue=@&quot;new Value&quot;
+(NSTaggedPointerString *) $7 = 0x0b0243f720240095 @&quot;new Value&quot;
+(lldb) po ocValue
+new Value
+
+(lldb) e count=3
+(NSUInteger) $9 = 3
+(lldb) po count
+3</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>thread return  &lt;&#x53EF;&#x9009;&#x53C2;&#x6570;&gt;</code> //&#x5728;&#x6267;&#x884C;&#x65F6;&#x5B83;&#x4F1A;&#x628A;&#x53EF;&#x9009;&#x53C2;&#x6570;&#x52A0;&#x8F7D;&#x8FDB;&#x8FD4;&#x56DE;&#x5BC4;&#x5B58;&#x5668;&#x91CC;&#xFF0C;&#x7136;&#x540E;&#x7ACB;&#x523B;&#x6267;&#x884C;&#x8FD4;&#x56DE;&#x547D;&#x4EE4;&#xFF0C;&#x8DF3;&#x51FA;&#x5F53;&#x524D;&#x6808;&#x5E27;&#x3002;&#x8FD9;&#x610F;&#x5473;&#x8FD9;&#x51FD;&#x6570;&#x5269;&#x4F59;&#x7684;&#x90E8;&#x5206;&#x4E0D;&#x4F1A;&#x88AB;&#x6267;&#x884C;&#x3002;</p>
+<p>&#x8D77;&#x5230;&#x7684;&#x4F5C;&#x7528;&#x7C7B;&#x4F3C;</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">int calculateTheTrickyValue {
+return 9;
+
+/*
+ some code
+ ...
+}</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>  &#x60F3;&#x8C61;&#x628A;&#x65AD;&#x70B9;&#x653E;&#x5728;&#x51FD;&#x6570;&#x7684;&#x5F00;&#x5934;&#xFF0C;&#x7136;&#x540E;&#x7528; <code>thread return</code> &#x547D;&#x4EE4;&#x91CD;&#x5199;&#x51FD;&#x6570;&#x7684;&#x884C;&#x4E3A;&#xFF0C;&#x7136;&#x540E;&#x7EE7;&#x7EED;&#x3002;&#x60F3;&#x8C61;&#x4E00;&#x4E0B;&#x8BA9;&#x8FD9;&#x4E2A;&#x8FC7;&#x7A0B;&#x81EA;&#x52A8;&#x5316;&#xFF0C;&#x542C;&#x8D77;&#x6765;&#x4E0D;&#x9519;&#xFF0C;&#x4E0D;&#x662F;&#x5417;&#xFF1F;</p>
+<ul>
+<li><p><code>br li</code> //&#x5217;&#x51FA;&#x6240;&#x6709;&#x7684;&#x65AD;&#x70B9;</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(lldb) br list
+Current breakpoints:
+1: file = &apos;/Users/terry/Desktop/LLDBTest/LLDBTest/main.m&apos;, line = 15, locations = 1, resolved = 1, hit count = 1
+
+  1.1: where = LLDBTest`main + 65 at main.m:15, address = 0x0000000100000ef1, resolved, hit count = 1 
+
+(lldb)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>br enable &lt;breakpointID&gt; &#x6216;&#x8005;  br disable &lt;breakpointID&gt;</code> //&#x65AD;&#x70B9;&#x7684;&#x5F00;&#x542F;   </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"> (lldb) br enable 1
+1 breakpoints enabled.
+(lldb) br disable 1
+1 breakpoints disabled.
+(lldb)</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>##&#x9AD8;&#x7EA7;&#x6280;&#x5DE7;</p>
+<p>###&#x521B;&#x5EFA;&#x666E;&#x901A;&#x65AD;&#x70B9;&#xFF08;&#x6307;&#x5B9A;&#x67D0;&#x4E00;&#x884C;&#x7684;&#x65AD;&#x70B9;&#xFF09;&#x548C;&#x7B26;&#x53F7;&#x65AD;&#x70B9;&#xFF08;&#x6839;&#x636E;&#x8C03;&#x7528;&#x7684;&#x65B9;&#x6CD5;&#x6307;&#x5B9A;&#x65AD;&#x70B9;&#xFF09;</p>
+<ul>
+<li><p><code>b main.m:17</code> //b &#x662F;_regexp-break &#x65AD;&#x70B9;&#x5B9A;&#x4F4D;&#x5230;main.m&#x6587;&#x4EF6;&#x7684;17&#x884C;</p>
+</li>
+<li><p><code>b add</code> //&#x65AD;&#x70B9;&#x6253;&#x5728;&#x65B9;&#x6CD5;&#x7684;&#x5F00;&#x59CB;<br> <img src="http://img.blog.csdn.net/20160219131112252" alt="&#x521B;&#x5EFA;&#x666E;&#x901A;&#x65AD;&#x70B9;"></p>
+</li>
+<li><code>&#x901A;&#x8FC7;Xcode&#x7684;UI&#x521B;&#x5EFA;&#x7B26;&#x53F7;&#x65AD;&#x70B9;</code><br><img src="http://img.blog.csdn.net/20160219131154628" alt="&#x521B;&#x5EFA;&#x7B26;&#x53F7;&#x65AD;&#x70B9;"><br>&#x5728;<code>Symbol</code>&#x5BF9;&#x5E94;&#x7684;&#x8F93;&#x5165;&#x6846;&#x4E2D;&#x8F93;&#x5165;<code>-[NSArray objectAtIndex:]</code>,&#x8FD9;&#x6837;&#x6BCF;&#x6B21;&#x8C03;&#x7528;&#x8FD9;&#x4E2A;&#x51FD;&#x6570;&#x7684;&#x65F6;&#x5019;&#xFF0C;&#x7A0B;&#x5E8F;&#x90FD;&#x4F1A;&#x505C;&#x6B62;&#xFF0C;&#x4E0D;&#x7BA1;&#x662F;&#x4F60;&#x8C03;&#x7528;&#x8FD8;&#x662F;&#x82F9;&#x679C;&#x8C03;&#x7528;&#x3002;</li>
+</ul>
+<h3 id="&#x914D;&#x7F6E;&#x65AD;&#x70B9;"><a href="#&#x914D;&#x7F6E;&#x65AD;&#x70B9;" class="headerlink" title="&#x914D;&#x7F6E;&#x65AD;&#x70B9;"></a>&#x914D;&#x7F6E;&#x65AD;&#x70B9;</h3><h4 id="&#x4F7F;&#x7528;Xcode-UI"><a href="#&#x4F7F;&#x7528;Xcode-UI" class="headerlink" title="&#x4F7F;&#x7528;Xcode UI"></a>&#x4F7F;&#x7528;Xcode UI</h4><p><img src="http://img.blog.csdn.net/20160219131222253" alt="&#x521B;&#x5EFA;&#x7B26;&#x53F7;&#x65AD;&#x70B9;"></p>
+<p>&#x8F93;&#x51FA;&#x7ED3;&#x679C;&#x5982;&#x4E0B;</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(NSUInteger) $1 = 3
+&quot;&#x6D4B;&#x8BD5;ShellCommand&quot;
+count&#x7684;&#x7ED3;&#x679C;&#xFF1A;3
+(lldb)</span><br></pre></td></tr></table></figure>
+<p>  &#x5E76;&#x5F39;&#x51FA;&#x5BF9;&#x8BDD;&#x6846;&#xFF0C;&#x53D1;&#x51FA;&#x58F0;&#x97F3;</p>
+<p>  <img src="http://img.blog.csdn.net/20160219131257653" alt="&#x521B;&#x5EFA;&#x7B26;&#x53F7;&#x65AD;&#x70B9;"></p>
+<ul>
+<li><p><code>Conditon</code> //&#x65AD;&#x70B9;&#x751F;&#x6548;&#x7684;&#x6761;&#x4EF6;</p>
+</li>
+<li><p><code>ignore</code> //&#x544A;&#x8BC9;&#x65AD;&#x70B9;&#x6700;&#x521D;&#x7684; n &#x6B21;&#x8C03;&#x7528; (&#x5E76;&#x4E14;&#x6761;&#x4EF6;&#x4E3A;&#x771F;&#x7684;&#x65F6;&#x5019;) &#x7684;&#x65F6;&#x5019;&#x4E0D;&#x8981;&#x505C;&#x6B62;&#x3002;</p>
+</li>
+<li><p><code>Action</code> //&#x89E6;&#x53D1;&#x65AD;&#x70B9;&#x540E;&#x7684;&#x884C;&#x4E3A;</p>
+<ul>
+<li><code>Debugger Command</code> //&#x4F7F;&#x7528;lldb&#x547D;&#x4EE4; &#x793A;&#x4F8B;&#x89C1;&#x4E0A;&#x56FE;</li>
+<li><code>AppleScript</code> //&#x4F7F;&#x7528;AppleScript,&#x53EF;&#x64CD;&#x4F5C;&#x672C;&#x5730;&#x5E94;&#x7528;</li>
+<li><code>Shell Command</code> //&#x4F7F;&#x7528;Shell&#x547D;&#x4EE4;</li>
+<li><code>Log Message</code> //&#x7C7B;&#x4F3C;NSLog</li>
+<li><code>Automatically continue after evaluation actions.</code> //&#x9009;&#x4E2D;&#x5B83;&#xFF0C;&#x8C03;&#x8BD5;&#x5668;&#x4F1A;&#x8FD0;&#x884C;&#x4F60;&#x6240;&#x6709;&#x7684;&#x547D;&#x4EE4;&#xFF0C;&#x7136;&#x540E;&#x7EE7;&#x7EED;&#x8FD0;&#x884C;&#x3002;&#x770B;&#x8D77;&#x6765;&#x5C31;&#x50CF;&#x6CA1;&#x6709;&#x6267;&#x884C;&#x4EFB;&#x4F55;&#x65AD;&#x70B9;&#x4E00;&#x6837; &#x3002;</li>
+</ul>
+</li>
+</ul>
+<h4 id="&#x4F7F;&#x7528;LLDB&#x547D;&#x4EE4;-&#x914D;&#x7F6E;&#x65AD;&#x70B9;"><a href="#&#x4F7F;&#x7528;LLDB&#x547D;&#x4EE4;-&#x914D;&#x7F6E;&#x65AD;&#x70B9;" class="headerlink" title="&#x4F7F;&#x7528;LLDB&#x547D;&#x4EE4; &#x914D;&#x7F6E;&#x65AD;&#x70B9;"></a>&#x4F7F;&#x7528;LLDB&#x547D;&#x4EE4; &#x914D;&#x7F6E;&#x65AD;&#x70B9;</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(lldb) b add
+Breakpoint 2: 77 locations.
+(lldb) br modify -c &apos;a == 3&apos; 2
+(lldb) br command add 2
+Enter your debugger command(s).  Type &apos;DONE&apos; to end.
+&gt; p a
+&gt; DONE
+(lldb) br list 2
+2: name = &apos;add&apos;, locations = 77, resolved = 77, hit count = 0
+    Breakpoint commands:
+      p a
+
+Condition: a == 3
+
+  2.1: where = LLDBTest`add + 10 at main.m:12, address = 0x0000000100000e8a, resolved, hit count = 0</span><br></pre></td></tr></table></figure>
+<p>  &#x8FD0;&#x884C;&#x5230;&#x65AD;&#x70B9;&#x7684;&#x7ED3;&#x679C;</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"> p a
+(int) $4 = 3
+(lldb)</span><br></pre></td></tr></table></figure>
+<h1 id="FaceBook&#x63D2;&#x4EF6;Chisel"><a href="#FaceBook&#x63D2;&#x4EF6;Chisel" class="headerlink" title="FaceBook&#x63D2;&#x4EF6;Chisel"></a>FaceBook&#x63D2;&#x4EF6;Chisel</h1><h3 id="&#x5B89;&#x88C5;"><a href="#&#x5B89;&#x88C5;" class="headerlink" title="&#x5B89;&#x88C5;"></a>&#x5B89;&#x88C5;</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">brew update
+brew install chisel</span><br></pre></td></tr></table></figure>
+<p>  &#x5B89;&#x88C5;&#x5B8C;&#x6210;&#x6309;&#x7167;&#x5B89;&#x88C5;&#x65E5;&#x5FD7;&#x4E0A;&#x7684;&#x63D0;&#x793A;&#xFF0C;&#x5728;<code>~/.lldbinit</code>&#x6587;&#x4EF6;&#x4E2D;&#x6DFB;&#x52A0;&#x4E00;&#x884C;&#xFF0C;&#x6CA1;&#x6709;&#x5219;&#x65B0;&#x5EFA;&#x3002; &#x63D0;&#x793A;&#x7C7B;&#x4F3C;&#x5982;&#x4E0B;&#xFF1A;</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">command script import /usr/local/opt/chisel/libexec/fblldb.py</span><br></pre></td></tr></table></figure>
+<p>  &#x5907;&#x6CE8;&#xFF1A;&#x6BCF;&#x6B21;Xcode&#x542F;&#x52A8;&#xFF0C;&#x90FD;&#x4F1A;&#x52A0;&#x8F7D;<code>~/.lldbinit</code>&#x6587;&#x4EF6;</p>
+<h3 id="&#x5E38;&#x7528;&#x547D;&#x4EE4;"><a href="#&#x5E38;&#x7528;&#x547D;&#x4EE4;" class="headerlink" title="&#x5E38;&#x7528;&#x547D;&#x4EE4;"></a>&#x5E38;&#x7528;&#x547D;&#x4EE4;</h3><ul>
+<li><p><code>pviews</code> //&#x9012;&#x5F52;&#x6253;&#x5370;&#x6240;&#x6709;&#x7684;view&#xFF0C;&#x5E76;&#x80FD;&#x6807;&#x793A;&#x5C42;&#x7EA7;&#xFF0C;&#x7B49;&#x4EF7;&#x4E8E;<code>[view recursiveDescription]</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"> (lldb) pviews self.view
+&lt;UIView: 0x12ee993b0; frame = (0 0; 320 568); autoresize = W+H; layer = &lt;CALayer: 0x12ee98690&gt;&gt;
+   | &lt;_UILayoutGuide: 0x12ee99760; frame = (0 0; 0 0); hidden = YES; layer = &lt;CALayer: 0x12ee8f2c0&gt;&gt;
+   | &lt;_UILayoutGuide: 0x12ee9a190; frame = (0 0; 0 0); hidden = YES; layer = &lt;CALayer: 0x12ee98580&gt;&gt;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<ul>
+<li><p><code>pvc</code> //&#x9012;&#x5F52;&#x6253;&#x5370;&#x6240;&#x6709;&#x7684;viewController&#xFF0C;&#x5E76;&#x80FD;&#x6807;&#x793A;&#x5C42;&#x7EA7;&#xFF0C;&#x7B49;&#x4EF7;&#x4E8E;<code>[UIViewController _printHierarchy]</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"> (lldb) pvc
+&lt;TabBarController: 0x13772fd0; view = &lt;UILayoutContainerView; 0x151b3a30&gt;; frame = (0, 0; 414, 736)&gt;
+   | &lt;UINavigationController: 0x1602b800; view = &lt;UILayoutContainerView; 0x1b00aca0&gt;; frame = (0, 0; 414, 736)&gt;
+   |   | &lt;FirstViewController: 0x16029c00; view = &lt;UIView; 0x1b01e1c0&gt;; frame = (0, 0; 414, 736)&gt;
+   | &lt;UINavigationController: 0x138c5200; view = &lt;UILayoutContainerView; 0x1316a080&gt;; frame = (0, 0; 414, 736)&gt;
+   |   | &lt;SecondViewController: 0x16030400; view = &lt;UIView; 0x2094b370&gt;; frame = (0, 0; 414, 736)&gt;
+   |   |   | &lt;SecondChildViewController: 0x15af6000; view = &lt;UIView; 0x18d4e650&gt;; frame = (0, 64; 414, 628)&gt;
+   | &lt;UINavigationController: 0x1383ca00; view = &lt;UILayoutContainerView; 0x13180070&gt;; frame = (0, 0; 414, 736)&gt;
+   |   | &lt;ThirdViewController: 0x138ddc00; view = &lt;UIView; 0x18df6650&gt;; frame = (0, 0; 414, 736)&gt;
+   |   |   | &lt;ThirdChild1ViewController: 0x1393fe00; view = &lt;UIView; 0x131ec000&gt;; frame = (0, 0; 414, 672)&gt;
+   |   |   | &lt;ThirdChild2ViewController: 0x138dce00; view = &lt;UIView; 0x204075a0&gt;; frame = (414, 0; 414, 672)&gt;
+   |   |   | &lt;ThirdChild3ViewController: 0x138a8e00; view = &lt;UIView; 0x20426250&gt;; frame = (828, 0; 414, 672)&gt;
+   | &lt;UINavigationController: 0x160eca00; view = &lt;UILayoutContainerView; 0x152f7d90&gt;; frame = (0, 0; 414, 736)&gt;
+   |   | &lt;FourViewController: 0x13157cc0; view not loaded&gt;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>visualize</code> //&#x53EF;&#x4EE5;&#x8BA9;&#x4F60;&#x4F7F;&#x7528;Mac&#x7684;&#x9884;&#x89C8;&#x6253;&#x5F00;&#x4E00;&#x4E2A; UIImage, CGImageRef, UIView, &#x6216; CALayer&#x3002; &#x8FD9;&#x4E2A;&#x529F;&#x80FD;&#x6216;&#x8BB8;&#x53EF;&#x4EE5;&#x5E2E;&#x6211;&#x4EEC;&#x7528;&#x6765;&#x622A;&#x56FE;&#x3001;&#x7528;&#x6765;&#x5B9A;&#x4F4D;&#x4E00;&#x4E2A;view&#x7684;&#x5177;&#x4F53;&#x5185;&#x5BB9;</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(lldb) visualize imageView</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>fv &amp; fvc</code> //&#x901A;&#x8FC7;&#x7C7B;&#x540D;&#x641C;&#x7D22;&#x5F53;&#x524D;&#x5185;&#x5B58;&#x4E2D;&#x5B58;&#x5728;&#x7684;view&#x548C;viewController&#x5B9E;&#x4F8B;&#x7684;&#x547D;&#x4EE4;&#xFF0C;&#x652F;&#x6301;&#x6B63;&#x5219;&#x641C;&#x7D22;</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">   (lldb) fv scrollView
+0x18d3b8c0 UIScrollView
+(lldb) fvc Home
+0x1393fe00 HomeFeedsViewController
+0x138a8e00 HomeFeedsViewController</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>show &amp; hide &lt;view or layer&gt;</code> //&#x663E;&#x793A;&#x548C;&#x9690;&#x85CF;&#x4E00;&#x4E2A;&#x6307;&#x5B9A;&#x7684; UIView . &#x4F60;&#x751A;&#x81F3;&#x4E0D;&#x9700;&#x8981;Continue Progress. &#x5C31;&#x53EF;&#x4EE5;&#x770B;&#x5230;&#x6548;&#x679C;  </p>
+</li>
+<li><p><code>mask/unmask &lt;view or layer&gt;   //border/unborder &lt;view or layer&gt;</code> //&#x6DFB;&#x52A0;&#x8499;&#x7248; &#x6DFB;&#x52A0;&#x8FB9;&#x6846;&#xFF0C;&#x7528;&#x6765;&#x8868;&#x793A;view&#x6216;layer&#x7684;&#x4F4D;&#x7F6E;</p>
+</li>
+<li><p><code>calfush</code> //&#x91CD;&#x65B0;&#x7ED8;&#x5236;&#x754C;&#x9762; &#x7B49;&#x4EF7;&#x4E8E;<code>[CATransaction flush]</code>,&#x8981;&#x6CE8;&#x610F;&#x5982;&#x679C;&#x5728;&#x52A8;&#x753B;&#x8FC7;&#x7A0B;&#x4E2D;&#x6267;&#x884C;&#x8FD9;&#x4E2A;&#x547D;&#x4EE4;&#xFF0C;&#x5C31;&#x76F4;&#x63A5;&#x6E32;&#x67D3;&#x51FA;&#x52A8;&#x753B;&#x7ED3;&#x675F;&#x7684;&#x6548;&#x679C;;&#x5F53;&#x4F60;&#x60F3;&#x5728;&#x8C03;&#x8BD5;&#x754C;&#x9762;&#x989C;&#x8272;&#x3001;&#x5750;&#x6807;&#x4E4B;&#x7C7B;&#x7684;&#x65F6;&#x5019;&#xFF0C;&#x53EF;&#x4EE5;&#x76F4;&#x63A5;&#x5728;&#x63A7;&#x5236;&#x53F0;&#x4FEE;&#x6539;&#x5C5E;&#x6027;&#xFF0C;&#x7136;&#x540E;caflush&#x5C31;&#x53EF;&#x4EE5;&#x770B;&#x5230;&#x6548;&#x679C;&#x5566;&#xFF0C;&#x662F;&#x4E0D;&#x662F;&#x8981;&#x6BD4;&#x6539;&#x4EE3;&#x7801;&#xFF0C;&#x7136;&#x540E;&#x91CD;&#x65B0;build&#x7701;&#x4E8B;&#x591A;&#x4E86;&#x5462;&#x3002;</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(lldb) e (void)[self.label setBackgroundColor:[UIColor greenColor]]
+(lldb) caflush</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<ul>
+<li><p><code>bmessage</code> //&#x8FD9;&#x4E2A;&#x547D;&#x4EE4;&#x5C31;&#x662F;&#x7528;&#x6765;&#x6253;&#x65AD;&#x70B9;&#x7528;&#x7684;&#x4E86;&#xFF0C;&#x867D;&#x7136;&#x5927;&#x5BB6;&#x65AD;&#x70B9;&#x53EF;&#x80FD;&#x90FD;&#x559C;&#x6B22;&#x5728;&#x56FE;&#x5F62;&#x754C;&#x9762;&#x91CC;&#x9762;&#x6253;&#xFF0C;&#x4F46;&#x662F;&#x8003;&#x8651;&#x4E00;&#x79CD;&#x60C5;&#x51B5;&#xFF1A;&#x6211;&#x4EEC;&#x60F3;&#x5728; [MyViewController viewWillAppear:] &#x91CC;&#x9762;&#x6253;&#x65AD;&#x70B9;&#xFF0C;&#x4F46;&#x662F; MyViewController&#x5E76;&#x6CA1;&#x6709;&#x5B9E;&#x73B0; viewWillAppear: &#x65B9;&#x6CD5;&#xFF0C; &#x4EE5;&#x5F80;&#x7684;&#x4F5C;&#x6CD5;&#x53EF;&#x80FD;&#x5C31;&#x662F;&#x5728;&#x5B50;&#x7C7B;&#x4E2D;&#x5B9E;&#x73B0;&#x4E0B;viewWillAppear:&#xFF0C;&#x7136;&#x540E;&#x6253;&#x65AD;&#x70B9;&#xFF0C;&#x7136;&#x540E;rebuild&#x3002;<br>&#x90A3;&#x4E48;&#x5E78;&#x597D;&#x6709;&#x4E86; bmessage&#x547D;&#x4EE4;&#x3002;&#x6211;&#x4EEC;&#x53EF;&#x4EE5;&#x4E0D;&#x7528;&#x8FD9;&#x6837;&#x5C31;&#x53EF;&#x4EE5;&#x6253;&#x8FD9;&#x4E2A;&#x6548;&#x679C;&#x7684;&#x65AD;&#x70B9;&#xFF1A; (lldb) bmessage -[ViewController viewWillAppear:] &#x4E0A;&#x9762;&#x547D;&#x4EE4;&#x4F1A;&#x5728;&#x5176;&#x7236;&#x7C7B;&#x7684; viewWillAppear: &#x65B9;&#x6CD5;&#x4E2D;&#x6253;&#x65AD;&#x70B9;&#xFF0C;&#x5E76;&#x6DFB;&#x52A0;&#x4E0A;&#x4E86;&#x6761;&#x4EF6;&#xFF1A;[self isKindOfClass:[ViewController class]]</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">  //&#x521B;&#x5EFA;&#x65AD;&#x70B9;
+(lldb) bmessage -[ViewController viewDidAppear:]
+Setting a breakpoint at -[ViewController viewDidAppear:] with condition (void*)object_getClass((id)$x0) == 0x00000001000acd58
+Breakpoint 2: where = ChiselTest`-[ViewController viewDidAppear:] at ViewController.m:31, address = 0x00000001000aa6a0
+//&#x6DFB;&#x52A0;&#x6761;&#x4EF6;
+(lldb) breakpoint modify -c &apos;[self isKindOfClass:[ViewController class]]&apos; 2</span><br></pre></td></tr></table></figure>
+<p><img src="http://img.blog.csdn.net/20160219131340341" alt="&#x521B;&#x5EFA;&#x65AD;&#x70B9;"></p>
+</li>
+<li><p><code>wivar &lt;Object&gt; &lt;&#x793A;&#x4F8B;&#x53D8;&#x91CF;&gt;</code> \&#x89C2;&#x5BDF;&#x5B9E;&#x4F8B;&#x53D8;&#x91CF;&#x7684;&#x53D8;&#x5316;</p>
+<p>&#x5047;&#x8BBE;&#x4F60;&#x6709;&#x4E00;&#x4E2A; ViewController&#xFF0C;&#x4E0D;&#x77E5;&#x9053;&#x4E3A;&#x4EC0;&#x4E48;&#x5B83;&#x7684; _label2 &#x5B9E;&#x4F8B;&#x53D8;&#x91CF;&#x88AB;&#x91CD;&#x5199;&#x4E86; (&#x7CDF;&#x7CD5;)&#x3002;&#x56E0;&#x4E3A;&#x6709;&#x53EF;&#x80FD;&#x5E76;&#x4E0D;&#x6D89;&#x53CA;&#x5230;&#x65B9;&#x6CD5;&#xFF0C;&#x6211;&#x4EEC;&#x4E0D;&#x80FD;&#x4F7F;&#x7528;&#x7B26;&#x53F7;&#x65AD;&#x70B9;&#x3002;&#x76F8;&#x53CD;&#x7684;&#xFF0C;&#x6211;&#x4EEC;&#x60F3;&#x76D1;&#x89C6;&#x4EC0;&#x4E48;&#x65F6;&#x5019;&#x8FD9;&#x4E2A;&#x5730;&#x5740;&#x88AB;&#x5199;&#x5165;&#x3002;<br><img src="http://img.blog.csdn.net/20160219131443972" alt="&#x521B;&#x5EFA;&#x65AD;&#x70B9;"></p>
+</li>
+<li><p><code>&#x81EA;&#x5B9A;&#x4E49;&#x547D;&#x4EE4;</code> //&#x6211;&#x4EEC;&#x4E5F;&#x53EF;&#x4EE5;&#x81EA;&#x5B9A;&#x4E49;&#x63D2;&#x4EF6;&#xFF0C;&#x4E0D;&#x8FC7;&#x524D;&#x63D0;&#x662F;&#x8981;&#x61C2;&#x4E00;&#x4E9B; python&#x3002; &#x6BD4;&#x5982;&#x8BBE;&#x8BA1;&#x4E00;&#x4E2A;&#x6253;&#x5370;keyWindow&#x7684;windowLevel&#x7684;&#x547D;&#x4EE4;</p>
+<p>&#x521B;&#x5EFA;python&#x811A;&#x672C;&#x6587;&#x4EF6; /magical/commands/example.py :</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">   #!/usr/bin/python
+# Example file with custom commands, located at /magical/commands/example.py
+
+import lldb
+import fblldbbase as fb
+
+def lldbcommands():
+  return [ PrintKeyWindowLevel() ]
+
+class PrintKeyWindowLevel(fb.FBCommand):
+  def name(self):
+    return &apos;pkeywinlevel&apos;
+
+  def description(self):
+    return &apos;An incredibly contrived command that prints the window level of the key window.&apos;
+
+  def run(self, arguments, options):
+    # It&apos;s a good habit to explicitly cast the type of all return
+    # values and arguments. LLDB can&apos;t always find them on its own.
+    lldb.debugger.HandleCommand(&apos;p (CGFloat)[(id)[(id)[UIApplication sharedApplication] keyWindow] windowLevel]&apos;)</span><br></pre></td></tr></table></figure>
+<p>&#x5176;&#x4E2D;&#x5B9A;&#x4E49;&#x4E86;PrintKeyWindowLevel&#x7684;&#x7C7B;&#xFF0C;&#x9700;&#x8981;&#x5B9E;&#x73B0; name description run &#x65B9;&#x6CD5;&#x6765;&#x5206;&#x522B;&#x544A;&#x8BC9;&#x540D;&#x79F0;&#x3001;&#x63CF;&#x8FF0;&#x3001;&#x548C;&#x6267;&#x884C;&#x5B9E;&#x4F53;&#x3002;</p>
+<p>&#x521B;&#x5EFA;&#x597D;&#x811A;&#x672C;&#x540E;&#xFF0C;&#x7136;&#x540E;&#x5728;&#x524D;&#x9762;&#x5B89;&#x88C5;&#x65F6;&#x521B;&#x5EFA;&#x7684; ~/.lldbinit&#x6587;&#x4EF6;&#x4E2D;&#x6DFB;&#x52A0;&#x4E00;&#x884C;&#xFF1A;</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">script fblldb.loadCommandsInDirectory(&apos;/magical/commands/&apos;)</span><br></pre></td></tr></table></figure>
+<p>&#x7136;&#x540E;&#x91CD;&#x542F;Xcode&#x4E4B;&#x540E;&#x5C31;&#x53EF;&#x4EE5;&#x4F7F;&#x7528;&#x81EA;&#x5B9A;&#x4E49;&#x7684;&#x547D;&#x4EE4;&#x5566;&#x3002;</p>
+</li>
+</ul>
+<h2 id="LLDB&#x548C;Python"><a href="#LLDB&#x548C;Python" class="headerlink" title="LLDB&#x548C;Python"></a>LLDB&#x548C;Python</h2><ul>
+<li><p>LLDB &#x6709;&#x5185;&#x5EFA;&#x7684;&#xFF0C;&#x5B8C;&#x6574;&#x7684; Python &#x652F;&#x6301;&#x3002;&#x5728;LLDB&#x4E2D;&#x8F93;&#x5165; script&#xFF0C;&#x4F1A;&#x6253;&#x5F00;&#x4E00;&#x4E2A; Python REPL&#x3002;&#x4F60;&#x4E5F;&#x53EF;&#x4EE5;&#x8F93;&#x5165;&#x4E00;&#x884C; python &#x8BED;&#x53E5;&#x4F5C;&#x4E3A; script &#x547D;&#x4EE4; &#x7684;&#x53C2;&#x6570;&#xFF0C;&#x8FD9;&#x53EF;&#x4EE5;&#x8FD0;&#x884C; python &#x8BED;&#x53E5;&#x800C;&#x4E0D;&#x8FDB;&#x5165;REPL&#xFF1A;</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">   (lldb) script
+Python Interactive Interpreter. To exit, type &apos;quit()&apos;, &apos;exit()&apos;.
+&gt;&gt;&gt; import os
+&gt;&gt;&gt; os.system(&quot;open http://www.objc.io/&quot;)
+0</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>&#x7B49;&#x4EF7;&#x4E8E;</p>
+   <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">   (lldb) script
+Python Interactive Interpreter. To exit, type &apos;quit()&apos;, &apos;exit()&apos;.
+&gt;&gt;&gt; import os
+&gt;&gt;&gt; os.system(&quot;open http://www.objc.io/&quot;)
+0</span><br></pre></td></tr></table></figure>
+<p>  &#x7ED3;&#x679C;&#xFF1A;&#x5728;&#x9ED8;&#x8BA4;&#x6D4F;&#x89C8;&#x5668;&#x4E2D;&#x6253;&#x5F00;&#x7F51;&#x5740;&#xFF1A;<a href="http://www.objc.io/" target="_blank" rel="external">http://www.objc.io/</a><br>  &#x8FD9;&#x5C31;&#x662F;Chisel&#x7684;&#x5B9E;&#x73B0;&#x539F;&#x7406;&#x3002;</p>
+<h2 id="&#x7528;LLDB&#x4F18;&#x5316;&#x8C03;&#x8BD5;"><a href="#&#x7528;LLDB&#x4F18;&#x5316;&#x8C03;&#x8BD5;" class="headerlink" title="&#x7528;LLDB&#x4F18;&#x5316;&#x8C03;&#x8BD5;"></a>&#x7528;LLDB&#x4F18;&#x5316;&#x8C03;&#x8BD5;</h2><ul>
+<li>&#x914D;&#x7F6E;&#x65AD;&#x70B9;<code>Log Message</code> &#x4EE3;&#x66FF;<code>NSLog</code></li>
+<li>&#x4F7F;&#x7528;<code>expression</code> &#x6539;&#x53D8;&#x53D8;&#x91CF;&#xFF0C;&#x7EE7;&#x7EED;&#x8FD0;&#x884C;&#xFF0C;&#x4EE3;&#x66FF;&#x4FEE;&#x6539;&#x4EE3;&#x7801;&#xFF0C;&#x6539;&#x53D8;&#x53D8;&#x91CF;&#x503C;&#xFF0C;&#x91CD;&#x65B0;&#x7F16;&#x8BD1;</li>
+<li>&#x4F7F;&#x7528;<code>thread return &lt;&#x53EF;&#x9009;&#x53C2;&#x6570;&gt;</code>  &#x52A8;&#x6001;&#x6DFB;&#x52A0; <code>return</code> &#x4EE3;&#x7801;, &#x4EE3;&#x66FF;&#x4EE3;&#x7801;&#x6DFB;&#x52A0;<code>return</code> ,&#x91CD;&#x65B0;&#x7F16;&#x8BD1;</li>
+</ul>
+<h2 id="&#x5E38;&#x89C1;&#x9519;&#x8BEF;&#x6574;&#x7406;"><a href="#&#x5E38;&#x89C1;&#x9519;&#x8BEF;&#x6574;&#x7406;" class="headerlink" title="&#x5E38;&#x89C1;&#x9519;&#x8BEF;&#x6574;&#x7406;"></a>&#x5E38;&#x89C1;&#x9519;&#x8BEF;&#x6574;&#x7406;</h2><ul>
+<li><p>&#x4E0D;&#x660E;&#x7C7B;&#x578B;&#x6216;&#x8005;&#x7C7B;&#x578B;&#x4E0D;&#x5339;&#x914D;</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">   (lldb) p NSLog(@&quot;%@&quot;,[self.view  viewWithTag:1001])
+error: &apos;NSLog&apos; has unknown return type; cast the call to its declared return type
+error: 1 errors parsing expression</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p> &#x591A;&#x89C1;&#x4E8E;id&#x7C7B;&#x578B;&#xFF0C;&#x6BD4;&#x5982;NSArray&#x4E2D;&#x67D0;&#x4E2A;&#x503C;&#xFF09;&#xFF0C;&#x90A3;&#x6211;&#x4EEC;&#x5C31;&#x5FC5;&#x987B;&#x663E;&#x5F0F;&#x58F0;&#x660E;&#x7C7B;&#x578B;</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">p (void)NSLog(@&quot;%@&quot;,[self.view  viewWithTag:1001])</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>&#x627E;&#x4E0D;&#x5230;&#x65B9;&#x6CD5;</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">   (lldb) po self.view.frame
+error: unsupported expression with unknown type
+error: unsupported expression with unknown type
+error: 2 errors parsing expression</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p> &#x8FD9;&#x4F3C;&#x4E4E;&#x662F;lldb&#x7684;&#x4E00;&#x4E2A;bug&#xFF0C;&#x65E0;&#x6CD5;&#x901A;&#x8FC7;&#x70B9;&#x5C5E;&#x6027;&#x8BBF;&#x95EE;&#x7684;&#x65B9;&#x6CD5;&#x6253;&#x5370;framework&#x91CC;&#x9762;&#x7684;&#x5BF9;&#x8C61;&#xFF0C;&#x4F46;&#x662F;&#x81EA;&#x5DF1;&#x5728;app&#x91CC;&#x9762;&#x5B9A;&#x4E49;&#x7684;&#x5C31;&#x53EF;&#x4EE5;&#x3002;&#x6211;&#x4EEC;&#x628A;&#x4E0A;&#x9762;&#x7684;&#x547D;&#x4EE4;&#x6539;&#x52A8;&#x4E00;&#x4E0B;&#xFF1A;</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(lldb) p (CGRect)[self.view frame]
+(CGRect) $0 = origin=(x=0, y=0) size=(width=320, height=480)</span><br></pre></td></tr></table></figure>
+<p>  &#x6216;&#x8005;</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(lldb) po self.view
+&lt;UIView: 0x15fe67a10; frame = (0 0; 320 568); autoresize = W+H; layer = &lt;CALayer: 0x15fe67d80&gt;&gt;</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2016/03/21/GIT_从头开始/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">GIT从头开始</div>
+      <strong class="article-nav-caption">></strong>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+<div class="share_jia">
+	<!-- JiaThis Button BEGIN -->
+	<div class="jiathis_style">
+		<span class="jiathis_txt">分享到: &nbsp; </span>
+		<a class="jiathis_button_facebook"></a> 
+    <a class="jiathis_button_twitter"></a>
+    <a class="jiathis_button_plus"></a> 
+    <a class="jiathis_button_tsina"></a>
+		<a class="jiathis_button_cqq"></a>
+		<a class="jiathis_button_douban"></a>
+		<a class="jiathis_button_weixin"></a>
+		<a class="jiathis_button_tumblr"></a>
+    <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+	</div>
+	<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1405949716054953" charset="utf-8"></script>
+	<!-- JiaThis Button END -->
+</div>
+
+
+
+
+
+
+<div class="duoshuo">
+	<!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="LLDB调试器" data-title="LLDB调试器总结" data-url="http://licaishi.github.io/2016/03/21/LLDB调试器/"></div>
+	<!-- 多说评论框 end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"true"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+	<!-- 多说公共JS代码 end -->
+</div>
+
+
+
+
+</div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info">
+    	<div class="footer-left">
+    		&copy; 2016 新浪理财师移动端团队
+    	</div>
+      	<div class="footer-right">
+      		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
+      	</div>
+    </div>
+  </div>
+</footer>
+    </div>
+    
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" type="text/css">
+
+
+<script>
+	var yiliaConfig = {
+		fancybox: true,
+		mathjax: true,
+		animate: true,
+		isHome: false,
+		isPost: true,
+		isArchive: false,
+		isTag: false,
+		isCategory: false,
+		open_in_new: false
+	}
+</script>
+<script src="http://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js" type="text/javascript"></script>
+<script src="/js/main.js" type="text/javascript"></script>
+
+
+
+
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  </div>
+</body>
+</html>

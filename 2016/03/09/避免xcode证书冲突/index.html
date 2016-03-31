@@ -4,18 +4,20 @@
   <meta charset="utf-8">
   
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
-  <title>新浪理财师移动端团队博客</title>
+  <title>多人协作开发避免profile文件和证书导致的xcodeproj文件冲突 | 新浪理财师移动端团队博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="licaishi.hexo.io source">
-<meta property="og:type" content="website">
-<meta property="og:title" content="新浪理财师移动端团队博客">
-<meta property="og:url" content="http://licaishi.github.io/README.html">
+  <meta name="description" content="&amp;#x591A;&amp;#x4EBA;&amp;#x534F;&amp;#x4F5C;&amp;#x5F00;&amp;#x53D1;&amp;#x907F;&amp;#x514D;profile&amp;#x6587;&amp;#x4EF6;&amp;#x6587;&amp;#x4EF6;&amp;#x51B2;&amp;#x7A81;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="多人协作开发避免profile文件和证书导致的xcodeproj文件冲突">
+<meta property="og:url" content="http://licaishi.github.io/2016/03/09/避免xcode证书冲突/index.html">
 <meta property="og:site_name" content="新浪理财师移动端团队博客">
-<meta property="og:description" content="licaishi.hexo.io source">
-<meta property="og:updated_time" content="2016-03-05T06:28:46.266Z">
+<meta property="og:description" content="&amp;#x591A;&amp;#x4EBA;&amp;#x534F;&amp;#x4F5C;&amp;#x5F00;&amp;#x53D1;&amp;#x907F;&amp;#x514D;profile&amp;#x6587;&amp;#x4EF6;&amp;#x6587;&amp;#x4EF6;&amp;#x51B2;&amp;#x7A81;">
+<meta property="og:image" content="http://licaishi.github.io/2016/03/09/避免xcode证书冲突/1.png">
+<meta property="og:image" content="http://licaishi.github.io/2016/03/09/避免xcode证书冲突/2.png">
+<meta property="og:updated_time" content="2016-03-31T06:45:25.786Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="新浪理财师移动端团队博客">
-<meta name="twitter:description" content="licaishi.hexo.io source">
+<meta name="twitter:title" content="多人协作开发避免profile文件和证书导致的xcodeproj文件冲突">
+<meta name="twitter:description" content="&amp;#x591A;&amp;#x4EBA;&amp;#x534F;&amp;#x4F5C;&amp;#x5F00;&amp;#x53D1;&amp;#x907F;&amp;#x514D;profile&amp;#x6587;&amp;#x4EF6;&amp;#x6587;&amp;#x4EF6;&amp;#x51B2;&amp;#x7A81;">
   
     <link rel="alternative" href="/atom.xml" title="新浪理财师移动端团队博客" type="application/atom+xml">
   
@@ -197,11 +199,11 @@
 	</div>
 </nav>
 
-      <div class="body-wrap"><article id="page-undefined" class="article article-type-page" itemscope itemprop="blogPost">
+      <div class="body-wrap"><article id="post-避免xcode证书冲突" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/README.html" class="article-date">
-  	<time datetime="2016-03-05T06:28:46.266Z" itemprop="datePublished">2016-03-05</time>
+      <a href="/2016/03/09/避免xcode证书冲突/" class="article-date">
+  	<time datetime="2016-03-09T12:04:17.000Z" itemprop="datePublished">2016-03-09</time>
 </a>
     </div>
   
@@ -210,15 +212,65 @@
       <input type="hidden" class="isFancy" />
     
     
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      多人协作开发避免profile文件和证书导致的xcodeproj文件冲突
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/xcode/">xcode</a></li></ul>
+	</div>
+
+        
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="licaishi-hexo-io-source"><a href="#licaishi-hexo-io-source" class="headerlink" title="licaishi.hexo.io source"></a>licaishi.hexo.io source</h1>
+        <p>&#x591A;&#x4EBA;&#x534F;&#x4F5C;&#x5F00;&#x53D1;&#x907F;&#x514D;profile&#x6587;&#x4EF6;&#x6587;&#x4EF6;&#x51B2;&#x7A81;</p>
+<a id="more"></a>
+<ol>
+<li>&#x7ED9;<strong>provisioningprofile</strong>&#x6587;&#x4EF6;&#x53D6;&#x4E2A;&#x901A;&#x4FD7;&#x6613;&#x61C2;&#x7684;&#x597D;&#x540D;&#x5B57;</li>
+<li>&#x628A;<strong>provisioningprofile</strong>&#x6587;&#x4EF6;&#x6C47;&#x603B;&#x52A0;&#x5165;&#x7248;&#x672C;&#x63A7;&#x5236;<br><img src="/2016/03/09/&#x907F;&#x514D;xcode&#x8BC1;&#x4E66;&#x51B2;&#x7A81;/1.png" alt="provisioningprofile&#x6587;&#x4EF6;&#x6C47;&#x603B;&#x52A0;&#x5165;&#x7248;&#x672C;&#x63A7;&#x5236;"></li>
+<li>&#x6BCF;&#x4E2A;&#x4EBA;&#x4ECE;<strong>Developer Center</strong>&#x4E0B;&#x8F7D;&#x81EA;&#x5DF1;&#x7684;Dev&#x8BC1;&#x4E66;&#x548C;&#x56E2;&#x961F;&#x7684;Distribution&#x8BC1;&#x4E66;,&#x53CC;&#x51FB;&#x52A0;&#x5165;KeyChain</li>
+<li>Xcode&#x4E2D;&#x5DE5;&#x7A0B;&#x6587;&#x4EF6;<code>Build Settings -&gt; Code Signing</code>&#x5982;&#x56FE;&#x6240;&#x793A;<img src="/2016/03/09/&#x907F;&#x514D;xcode&#x8BC1;&#x4E66;&#x51B2;&#x7A81;/2.png" alt="CodeSign&#x914D;&#x7F6E;&#x56FE;"></li>
+<li>&#x5982;&#x679C;<strong>provisioningprofile</strong>&#x6587;&#x4EF6;&#x88AB;&#x91CD;&#x65B0;&#x751F;&#x6210;&#x4E86; ,<br> &#x5220;&#x9664; <code>&#x4F60;&#x7684;&#x7528;&#x6237;&#x540D;/Library/MobileDevice/Provisioning Profiles/</code> &#x8DEF;&#x5F84;&#x4E0B;&#x6240;&#x6709;&#x5185;&#x5BB9; &#x91CD;&#x65B0;&#x5BFC;&#x5165;&#x6240;&#x6709;&#x6709;&#x6548;<strong>provisioningprofile</strong>&#x6587;&#x4EF6;</li>
+</ol>
+
       
     </div>
     
   </div>
   
     
+<nav id="article-nav">
+  
+    <a href="/2016/03/21/GIT_从头开始/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption"><</strong>
+      <div class="article-nav-title">
+        
+          GIT从头开始
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2016/03/05/Having-Fun-with-Git/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Having Fun with Git</div>
+      <strong class="article-nav-caption">></strong>
+    </a>
+  
+</nav>
+
   
 </article>
 
@@ -248,7 +300,7 @@
 
 <div class="duoshuo">
 	<!-- 多说评论框 start -->
-	<div class="ds-thread" data-thread-key="undefined" data-title="" data-url="http://licaishi.github.io/README.html"></div>
+	<div class="ds-thread" data-thread-key="避免xcode证书冲突" data-title="多人协作开发避免profile文件和证书导致的xcodeproj文件冲突" data-url="http://licaishi.github.io/2016/03/09/避免xcode证书冲突/"></div>
 	<!-- 多说评论框 end -->
 	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
 	<script type="text/javascript">
@@ -292,7 +344,7 @@
 		mathjax: true,
 		animate: true,
 		isHome: false,
-		isPost: false,
+		isPost: true,
 		isArchive: false,
 		isTag: false,
 		isCategory: false,
